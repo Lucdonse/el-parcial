@@ -1,0 +1,95 @@
+
+import example.*
+
+describe "tests"{
+	
+	
+	
+	
+	const argentina = new Seleccion()
+	const arabia = new SeleccionOpuesta()
+	const francia = new SeleccionOpuesta()
+	
+	const messi = new Jugador(miSeleccion=argentina)
+	const diMaria = new Jugador(miSeleccion=argentina)
+	
+	const carlos = new Simpatizante (equipo = argentina, alegria = 5)
+	const esteban = new Seguidor (equipo = argentina, alegria = 5, jugadorPreferido = messi)
+	const ariel = new Fanatico (equipo = argentina, alegria = 5, fanatismo = 3)
+	const juan = new FanaticoAlExtremo(equipo = argentina, alegria = 5, fanatismo = 3) // el fanatico al extremo va aumentando su fanatismo a medida que ocurren los goles(tanto festejados como recibidos) conviertiendolo en un fanatico que modificara su alegria en funcion del fanatismo que tenga
+	
+	test "messi le hace un gol a arabia" {
+
+	messi.realizarGol(arabia,40,false)
+	assert.equals(1,argentina.golesTotales())
+
+	}
+	
+	test "argentina hace 3 goles, y se puede mostrar la suma total de goles "{
+		
+		messi.realizarGol(arabia,40,false)
+		messi.realizarGol(arabia,43,true)
+		diMaria.realizarGol(francia,13,false)
+		assert.equals(3,argentina.golesTotales())
+		
+	}
+	
+	test " se hacen 3 goles, y dos son de penal"{
+
+		messi.realizarGol(arabia,40,false)
+		messi.realizarGol(arabia,43,true)
+		diMaria.realizarGol(francia,13,true)
+		assert.equals(2,argentina.golesDePenal())
+
+}
+	test " se hacen 2 goles a arabia y 1 a francia, el equipo que mas goles recibio es arabia"{
+		
+		
+		messi.realizarGol(arabia,40,false)
+		messi.realizarGol(arabia,43,true)
+		diMaria.realizarGol(francia,13,true)
+		assert.equals(arabia,argentina.seleccionConMayorCantidadDeGoles())
+		
+	}
+	
+	test "Argentina hace un gol y los tres hinchas, carlos, esteban y ariel les sube la alegria en 1"{
+		
+		argentina.agregarHincha(carlos)
+		argentina.agregarHincha(esteban)
+		argentina.agregarHincha(ariel)
+		diMaria.realizarGol(arabia,40,false)
+		assert.equals(6, carlos.alegria())
+		assert.equals(6, esteban.alegria())
+		assert.equals(6, ariel.alegria())
+			
+	}
+
+	test "messi hace un gol y como es el jugador preferido de esteban se duplica su alegria, empieza con 5, le suma 1 y luego lo duplica"{
+		
+		argentina.agregarHincha(esteban)
+		messi.realizarGol(arabia,40,false)
+		assert.equals(12, esteban.alegria())
+	}
+	
+	
+	test "ariel es muy fanatico de argentina por eso cuando su equipo recibe un gol pierde alegria por su fanatismo"{
+		
+		argentina.agregarHincha(ariel)
+		assert.equals(5, ariel.alegria())
+		argentina.recibirGol()
+		assert.equals(2, ariel.alegria())
+		
+		
+	}
+	
+	test "ariel se vuelve extremadamente fanatico y no puede soportar que argentina reciba un gol, se prueba la excepcion"{
+		
+		ariel.alegria(1)
+		ariel.fanatismo(10)
+		argentina.agregarHincha(ariel)
+		assert.throwsException{argentina.recibirGol()}
+		
+		
+	}
+
+}
