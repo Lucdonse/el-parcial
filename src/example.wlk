@@ -22,7 +22,8 @@ class Seleccion{
 		listaGolesRealizados.add(gol)
 		seleccionesEnfrentadas.add(gol.seleccionOpuesta())
 		hinchas.forEach{hincha => hincha.festejarGol(gol.jugador())}
-		
+		if(gol.enTiempoDeDescuento())
+			hinchas.forEach{ hincha => hincha.golEnTiempoDeDescuento(gol.minuto())}
 	}
 	
 	method golesTotales() = listaGolesRealizados.size()
@@ -39,6 +40,8 @@ class Seleccion{
 		hinchas.forEach{hincha => hincha.recibirGol()}
 	}
 	
+	method losHinchasMasAlegres() = hinchas.filter{hincha => hincha.estoyMuyAlegre()}
+	
 	
 	
 }
@@ -49,6 +52,8 @@ class Gol{
 	const property seleccionOpuesta
 	const property minuto
 	const property penal = false
+	
+	method enTiempoDeDescuento() = minuto >90
 	
 }
 
@@ -75,7 +80,7 @@ class Jugador{
 
 class Simpatizante{
 	
-	const property equipo
+	
 	var property alegria
 	
 	
@@ -83,14 +88,21 @@ class Simpatizante{
 			alegria +=1	
 	}
 	
+	method estoyMuyAlegre() = alegria >10
+	
 		
 	method recibirGol(){}
+	
+	method golEnTiempoDeDescuento(minutos){
+		alegria = alegria + ((minutos - 90)*3)
+	}
+	
 	
 }
 
 class Seguidor inherits Simpatizante{
 	
-	const property jugadorPreferido
+	var property jugadorPreferido
 	
 	method verificarJugador(jugador) = jugadorPreferido == jugador
 	
@@ -99,6 +111,8 @@ class Seguidor inherits Simpatizante{
 		if(self.verificarJugador(jugador))
 			alegria = alegria*2
 	}
+	
+	
 	
 	
 }
