@@ -70,10 +70,6 @@ class Jugador{
 		
 	}
 	
-	//method numeroGolesDePenal() = golesRealizados.count{gol => gol.penal()}
-	
-	//method seleccionQueMasRecibioMisGoles() = golesRealizados.max{golesRealizados.count{gol => gol.seleccionOpuesta()}}
-	
 	
 }
 
